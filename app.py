@@ -152,8 +152,3 @@ def get_entities_in_map_zone():
         'jobs': jobs,
         'total_entities': len(companies) + len(jobs)
     })
-
-if __name__ == '__main__':
-    with app.app_context():
-        test_db_connection()
-    app.run(host='0.0.0.0', port=5001, debug=True)
