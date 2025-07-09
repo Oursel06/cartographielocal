@@ -94,6 +94,15 @@ def get_job(job_id):
     ).first()
     job_dict['location'] = location.to_dict() if location else None
     
+    # Récupérer les informations de l'entreprise
+    company = Company.query.get(job.company_id)
+    if company:
+        job_dict['company_name'] = company.name
+        job_dict['company_image_url'] = company.image_url
+    else:
+        job_dict['company_name'] = None
+        job_dict['company_image_url'] = None
+    
     return jsonify(job_dict)
 
 # Utilisé pour la page "home_map"
