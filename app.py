@@ -12,6 +12,13 @@ from models.company import Company
 from models.job import Job
 from models.location import Location
 
+def test_db_connection():
+    try:
+        db.session.execute(text('SELECT 1'))
+        print("Connexion à la base de données OK")
+    except Exception as e:
+        print("Erreur de connexion à la BDD :", e)
+
 def create_app(test_config=None):
     app = Flask(__name__)
     if test_config:
@@ -19,13 +26,6 @@ def create_app(test_config=None):
     else:
         app.config.from_object(Config)
     db.init_app(app)
-
-    def test_db_connection():
-        try:
-            db.session.execute(text('SELECT 1'))
-            print("Connexion à la base de données OK")
-        except Exception as e:
-            print("Erreur de connexion à la BDD :", e)
 
     @app.route('/')
     def home():
@@ -81,7 +81,7 @@ def create_app(test_config=None):
             entity_id=job.id
         ).first()
         job_dict['location'] = location.to_dict() if location else None
-        company = Company.query.get(job.company_id)
+        company = db.session.get(Company, job.company_id)
         if company:
             job_dict['company_name'] = company.name
             job_dict['company_image_url'] = company.image_url
@@ -110,13 +110,13 @@ def create_app(test_config=None):
         jobs = []
         for location in locations:
             if location.entity_type == 'company':
-                company = Company.query.get(location.entity_id)
+                company = db.session.get(Company, location.entity_id)
                 if company:
                     company_dict = company.to_dict()
                     company_dict['location'] = location.to_dict()
                     companies.append(company_dict)
             elif location.entity_type == 'job':
-                job = Job.query.get(location.entity_id)
+                job = db.session.get(Job, location.entity_id)
                 if job:
                     job_dict = job.to_dict()
                     job_dict['location'] = location.to_dict()
