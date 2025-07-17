@@ -25,7 +25,7 @@ cartographielocal est une application dédiée à la récupération des entrepri
 ### 1. Cloner le dépôt
 
 ```bash
-git clone https://github.com/votre-utilisateur/cartographielocal.git
+git clone https://github.com/Oursel06/cartographielocal.git
 cd cartographielocal
 ```
 
