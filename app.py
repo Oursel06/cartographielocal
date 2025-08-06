@@ -135,12 +135,9 @@ def create_app(test_config=None):
 
     return app
 
-# Initialisation de l'app uniquement pour le déploiement (Vercel, production, etc.)
-# et pas lors de l'import pour les tests
-import os
+# Créer l'instance de l'app pour Vercel
+app = create_app()
+
+# Pour les tests locaux
 if __name__ == "__main__":
-    app = create_app()
     app.run()
-# Pour Vercel ou d'autres serveurs WSGI, expose l'app uniquement si ce n'est pas en import de test
-if "VERCEL" in os.environ or os.getenv("DYNO") or os.getenv("GUNICORN_CMD_ARGS"):
-    app = create_app()
